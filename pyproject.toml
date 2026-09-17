@@ -1,0 +1,26 @@
+[project]
+name = "k8s-rag-slack-assistant"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.12"
+dependencies = [
+    "anthropic>=1.6.0",
+    "fastapi>=0.141.1",
+    "httpx>=0.28.1",
+    "langgraph>=1.2.11",
+    "python-dotenv>=1.2.3",
+    "qdrant-client>=1.19.1",
+    "redis>=8.1.0",
+    "rq>=2.12.0",
+    "sentence-transformers>=6.0.1",
+    "slack-sdk>=3.44.1",
+    "uvicorn[standard]>=0.53.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]

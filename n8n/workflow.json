@@ -1,0 +1,56 @@
+{
+  "name": "Slack -> k8s-rag-assistant",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "slack-k8s",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "webhook-node",
+      "name": "Slack Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [260, 300],
+      "webhookId": "slack-k8s"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api:8000/ingest",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Internal-Secret",
+              "value": "={{$env.INTERNAL_SHARED_SECRET}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"text\": $json.body.text, \"response_url\": $json.body.response_url, \"user_id\": $json.body.user_id, \"channel_id\": $json.body.channel_id } }}",
+        "options": {}
+      },
+      "id": "forward-node",
+      "name": "Forward to FastAPI",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [520, 300]
+    }
+  ],
+  "connections": {
+    "Slack Webhook": {
+      "main": [
+        [
+          {
+            "node": "Forward to FastAPI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
